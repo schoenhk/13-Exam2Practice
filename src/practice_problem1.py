@@ -5,8 +5,8 @@ This problem provides practice at:
   ***  IMPLEMENTING CLASSES.  ***
 
 Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Hunter Schoenborn.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 ########################################################################
 # Students:
@@ -39,13 +39,13 @@ def main():
     # UN-comment tests as you work the problems.
     ####################################################################
 
-#     run_test_init()
-#     run_test_append_string()
-#     run_test_double()
-#     run_test_shrink()
-#     run_test_double_then_shrink()
-#     run_test_reset()
-#     run_test_steal()
+    # run_test_init()
+    # run_test_append_string()
+    # run_test_double()
+    # run_test_shrink()
+    # run_test_double_then_shrink()
+    # run_test_reset()
+    run_test_steal()
 #     run_test_get_history()
 #     run_test_combined_box()
 
@@ -94,7 +94,7 @@ class Box(object):
           :type volume: int
         """
         # --------------------------------------------------------------
-        # TODO: 2. Implement and test this function.
+        # DONE: 2. Implement and test this function.
         #     See the testing code (below) for more examples.
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -102,6 +102,14 @@ class Box(object):
         #    DIFFICULTY:      3
         #    TIME ESTIMATE:   5 minutes.
         # --------------------------------------------------------------
+
+        self.contents = contents
+        self.volume = volume
+        if len(self.contents) > self.volume:
+            self.contents = ""
+        self.OGcontents = self.contents
+        self.OGvolume = self.volume
+        self.history = 0
 
     def append_string(self, additional_contents):
         """
@@ -135,7 +143,7 @@ class Box(object):
           :type additional_contents: str
         """
         # --------------------------------------------------------------
-        # TODO: 3. Implement and test this function.
+        # DONE: 3. Implement and test this function.
         #     See the testing code (below) for more examples.
         # --------------------------------------------------------------
         # --------------------------------------------------------------
@@ -157,12 +165,26 @@ class Box(object):
         #    and continue working on the problem.
         # --------------------------------------------------------------
 
+        x = len(self.contents)
+        volume = self.volume
+        room = volume - x
+        clipped = ""
+        if room < len(additional_contents):
+            looper = room
+        else:
+            looper = len(additional_contents)
+        for k in range(looper):
+            self.contents = self.contents + additional_contents[k]
+        for q in range(looper, len(additional_contents)):
+            clipped = clipped + additional_contents[q]
+        return clipped
+
     def double(self):
         """
         What comes in:
           -- self
         What goes out:
-          Returrns a string that is whatever substring of the
+          Returns a string that is whatever substring of the
           doubled contents did not fit in this Box
           (or the empty string if the entire doubled contents fit)
         Side effects:
@@ -203,6 +225,7 @@ class Box(object):
         # FOR FULL CREDIT, YOUR SOLUTION MUST BE NO MORE THAN
         #    ** TWO **   LINES OF CODE.
         ################################################################
+        return self.append_string(self.contents)
 
     def shrink(self, new_volume):
         """
@@ -251,6 +274,23 @@ class Box(object):
         # IMPORTANT: Write a solution to this problem in pseudo-code,
         # and THEN translate the pseudo-code to a solution.
         # --------------------------------------------------------------
+        self.volume = new_volume
+        first = ""
+        OG = self.contents
+        cut = ''
+
+        if new_volume < len(self.contents):
+            looper = new_volume
+        else:
+            looper = len(self.contents)
+
+        for q in range(looper):
+            first = first + self.contents[q]
+        self.contents = first
+
+        for w in range(new_volume, len(OG)):
+            cut = cut + OG[w]
+        return cut
 
     def double_then_shrink(self, new_volume):
         """
@@ -304,6 +344,7 @@ class Box(object):
         #    DIFFICULTY:      5
         #    TIME ESTIMATE:   5 minutes.
         # --------------------------------------------------------------
+        return len(self.double()) + len(self.shrink(new_volume))
 
     def reset(self):
         """
@@ -323,6 +364,8 @@ class Box(object):
         #    DIFFICULTY:      4
         #    TIME ESTIMATE:   5 minutes.
         # --------------------------------------------------------------
+        self.contents = self.OGcontents
+        self.volume = self.OGvolume
 
     def steal(self, other_box):
         """
@@ -355,6 +398,7 @@ class Box(object):
         # FOR FULL CREDIT, YOUR SOLUTION MUST BE NO MORE THAN
         #    ** TWO **   LINES OF CODE.
         ################################################################
+        self.OGcontents = self.OGcontents + other_box.contents
 
     def get_history(self):
         """
